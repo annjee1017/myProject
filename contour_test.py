@@ -6,8 +6,8 @@ import imutils
 import os
 from imutils.paths import list_images
 
-TEST_IMAGE_DIR = '05_output'
-OUTPUT_DIR = '06_output2'
+TEST_IMAGE_DIR = 'test_seg'
+OUTPUT_DIR = 'test_output'
 os.makedirs(OUTPUT_DIR, exist_ok= True)
 
 total_error = []
@@ -49,7 +49,7 @@ for num, path in enumerate(sorted(list(list_images(TEST_IMAGE_DIR)))):
 
     # calculate standard Y
     standardY_1 = int((sum(cY_1)-max(cY_1)-min(cY_1))/(len(cY_1)-2))
-    standardY_2 = int((sum(cY_2)-max(cY_2)-min(cY_2))/(len(cY_2)-2))          
+    standardY_2 = int((sum(cY_2)-max(cY_2)-min(cY_2))/(len(cY_2)-2)) 
     standardY_3 = int((sum(cY_3)-max(cY_3)-min(cY_3))/(len(cY_3)-2))
     standardY_4 = int((sum(cY_4)-max(cY_4)-min(cY_4))/(len(cY_4)-2))
 
@@ -65,7 +65,7 @@ for num, path in enumerate(sorted(list(list_images(TEST_IMAGE_DIR)))):
     cv2.putText(clone, f"3. Standard Y: {standardY_3}", (min(cX_all)-380, standardY_3), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 3)
     cv2.putText(clone, f"4. Standard Y: {standardY_4}", (min(cX_all)-380, standardY_4), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 3)
 
-    cv2.putText(clone, f"* Pin: {len(cnts)}ea", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+    cv2.putText(clone, f"* Pin: {len(cnts)}ea", (50, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
     # cv2.putText(clone, f"* StandardY: 1. {standardY_1} / 2. {standardY_2} / 3. {standardY_3} / 4. {standardY_4}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
 
     # check error
@@ -75,10 +75,14 @@ for num, path in enumerate(sorted(list(list_images(TEST_IMAGE_DIR)))):
     for d in cY_4: error_4.append(abs(d-standardY_4)); total_error.append(abs(d-standardY_4))
 
     # cv2.putText(clone, f"* Max Error: {max(max(error_1), max(error_2), max(error_3), max(error_4))}px", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
-    cv2.putText(clone, f"* Max Error: 1. {max(error_1)}px / 2. {max(error_2)}px / 3. {max(error_3)}px / 4. {max(error_4)}px", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+    cv2.putText(clone, f"* Max Error: 1. {max(error_1)}px / 2. {max(error_2)}px / 3. {max(error_3)}px / 4. {max(error_4)}px", (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+    cv2.putText(clone, f"* Min Error: 1. {min(error_1)}px / 2. {min(error_2)}px / 3. {min(error_3)}px / 4. {min(error_4)}px", (50, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+    cv2.putText(clone, f"* Avg Error: 1. {int(sum(error_1)/len(error_1))}px / 2. {int(sum(error_2)/len(error_2))}px / 3. {int(sum(error_3)/len(error_3))}px / 4. {int(sum(error_4)/len(error_4))}px", (50, 175), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
 
     # save output images
     cv2.imwrite(f'{OUTPUT_DIR}/output_{filename}', clone)
+
+    print(f"* Avg Error: 1. {int(sum(error_1)/len(error_1))}px / 2. {int(sum(error_2)/len(error_2))}px / 3. {int(sum(error_3)/len(error_3))}px / 4. {int(sum(error_4)/len(error_4))}px")
 
     # show the output image
     clone = imutils.resize(clone, width=1024)
