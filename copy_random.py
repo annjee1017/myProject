@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# import the necessary packages
 import os
 from imutils import paths
 import random
