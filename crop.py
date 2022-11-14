@@ -1,5 +1,5 @@
 # USAGE
-# python crop.py -d imageL1
+# python crop.py -i image
 
 # import the necessary packages
 import numpy as np
