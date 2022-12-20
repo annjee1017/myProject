@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-# import the necessary packages
 import os
 from imutils import paths
 import random
@@ -9,16 +7,16 @@ import numpy as np
 import shutil
 
 # parameters #-----------------------------------------------------------------------
-rootDir = 'dataset' # 데이터 갯수를 맞출 폴더
+rootDir = '02_dataset/1_20/dd' # 이미지를 늘려야하는 폴더
 
-data_times = 2 # 현재 이미지 수 x data_times
-limit_file_len = 4963 # 파일 내 limit_file_len 보다 많은 이미지가 있을 경우, 카피 미실행
+data_times = 4 # 현재 이미지 수 x data_times
+limit_file_len = 2000 # 파일 내 limit_file_len 보다 많은 이미지가 있을 경우, 카피 미실행
 
-random_crop_value = 3 # 랜덤 픽셀 범위
+random_crop_value = 20 # 랜덤 픽셀 범위
 random_brightness_value = 10 # 랜덤 픽셀 범위
 #------------------------------------------------------------------------------------
 
-def random_crop(img, value=random_crop_value, resize=(300, 300)):
+def random_crop(img, value=random_crop_value, resize=(112, 112)):
     # print(img.shape[0]) # h, w, c
     val_h = random.randint(-value, value)
     val_w = random.randint(-value, value)
@@ -45,6 +43,7 @@ def random_brightness(img, value=random_brightness_value):
 # run #---------------------------------------------------------------------------------------------
 random.seed(11)
 drts_path = os.listdir(rootDir)
+# random.shuffle(drts_path)
 imgs_path = sorted(list(paths.list_images(rootDir)))
 for drt in drts_path:
     file_list = os.listdir(f"{rootDir}/{drt}")
@@ -57,9 +56,9 @@ for drt in drts_path:
             copy_count = 0
             copy_num = int((file_len*data_times)-file_len)
             print(f"[INFO] copy file : {drt} >> {int(file_len*data_times)}, {copy_num}")
-            random.shuffle(file_list)
-            for file in file_list:
-                while copy_num > copy_count:
+            while copy_num > copy_count:
+                random.shuffle(file_list)
+                for file in file_list:
                     img = cv2.imread(f"{rootDir}/{drt}/{file}")
                     
                     # random_brightness
